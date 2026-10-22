@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-zinc-950 text-zinc-100 antialiased;
+  margin: 0;
+}
+
+.prose-chat p {
+  @apply mb-3 last:mb-0 leading-relaxed text-zinc-200;
+}
+
+.prose-chat strong {
+  @apply font-semibold text-white;
+}
+
+.prose-chat em {
+  @apply text-zinc-400 not-italic text-sm;
+}
+
+.prose-chat ul {
+  @apply list-disc pl-5 space-y-1 my-2;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.35s ease-out;
+}
