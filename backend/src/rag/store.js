@@ -50,8 +50,10 @@ export async function addDocument(docMeta, chunksWithEmbeddings) {
     vectors.push({
       docId: docMeta.id,
       docName: docMeta.name,
+      uploadedAt: docMeta.uploadedAt,
       chunkIndex: chunk.index,
       text: chunk.text,
+      charCount: chunk.text.length,
       embedding: chunk.embedding,
     });
   }
@@ -71,14 +73,31 @@ export async function deleteDocument(docId) {
   await persist(nextDocs, nextVectors);
 }
 
-export async function searchSimilar(queryEmbedding, k = 4) {
-  const { vectors } = await loadStore();
-  if (!vectors.length) return [];
+export function filterVectors(vectors, documents, filter = {}) {
+  const uploadedAt = new Map(documents.map((doc) => [doc.id, doc.uploadedAt]));
+  return vectors
+    .map((vector) => ({
+      ...vector,
+      uploadedAt: vector.uploadedAt || uploadedAt.get(vector.docId) || null,
+    }))
+    .filter((vector) => {
+      if (filter.docId && vector.docId !== filter.docId) return false;
+      if (filter.docName && vector.docName !== filter.docName) return false;
+      return true;
+    });
+}
 
-  const scored = vectors.map((v) => ({
-    ...v,
-    score: cosineSimilarity(queryEmbedding, v.embedding),
-  }));
+export async function searchSimilar(queryEmbedding, k = 4, filter = {}) {
+  const { documents, vectors } = await loadStore();
+  const pool = filterVectors(vectors, documents, filter);
+  if (!pool.length || !queryEmbedding?.length) return [];
+
+  const scored = pool
+    .filter((vector) => vector.embedding?.length === queryEmbedding.length)
+    .map((vector) => ({
+      ...vector,
+      score: cosineSimilarity(queryEmbedding, vector.embedding),
+    }));
 
   scored.sort((a, b) => b.score - a.score);
   return scored.slice(0, k);

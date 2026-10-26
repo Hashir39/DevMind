@@ -10,6 +10,9 @@ import {
   searchSimilar,
   stats,
 } from "./store.js";
+import { rerank } from "./rerank.js";
+import { trimHistory, trimSources } from "./context.js";
+import { getRetrievalSettings } from "./retrievalSettings.js";
 
 const splitter = new RecursiveCharacterTextSplitter({
   chunkSize: 900,
@@ -105,7 +108,23 @@ function fallbackAnswer(question, sources, mode) {
   );
 }
 
-async function generateAnswer(question, context, mode, sources) {
+function documentFilter(question, documents, docId) {
+  if (docId) {
+    const selected = documents.find((doc) => doc.id === docId);
+    return selected ? { docId: selected.id, docName: selected.name } : { docId };
+  }
+
+  const asked = question.toLowerCase();
+  const named = documents.find((doc) => {
+    const stem = doc.name.replace(/\.[a-z0-9]+$/i, "").toLowerCase();
+    return stem.length > 3 && asked.includes(stem);
+  });
+  return named ? { docId: named.id, docName: named.name } : {};
+}
+
+async function generateAnswer(question, context, mode, sources, history) {
+  const trimmedHistory = trimHistory(history).history;
+
   if (!hasGeminiKey()) {
     return fallbackAnswer(question, sources, mode);
   }
@@ -113,19 +132,23 @@ async function generateAnswer(question, context, mode, sources) {
   try {
     if (mode === "baseline") {
       return await geminiGenerate({
-        system: "You are DocMind, a helpful assistant. Answer clearly and concisely.",
+        system:
+          "You are DocMind, a helpful assistant. Answer clearly and concisely. Use earlier messages in this chat when the user asks a follow-up.",
         user: question,
+        history: trimmedHistory,
       });
     }
 
     return await geminiGenerate({
       system: `You are DocMind, a document-grounded research assistant.
-Answer ONLY using the context below. If the context is insufficient, say you cannot find it in the uploaded documents.
+Answer using the retrieved context below. If the user asks a follow-up, also use the earlier chat.
+If the documents do not contain the answer, say so.
 Cite sources inline like [Source 1], [Source 2] when used.
 
 CONTEXT:
 ${context || "(no documents indexed yet)"}`,
       user: question,
+      history: trimmedHistory,
     });
   } catch (err) {
     console.warn("Gemini chat unavailable:", err.message);
@@ -133,23 +156,36 @@ ${context || "(no documents indexed yet)"}`,
   }
 }
 
-export async function askQuestion(question, mode = "rag") {
+export async function askQuestion(question, mode = "rag", history = [], options = {}) {
   const start = Date.now();
   let sources = [];
+  let filter = {};
 
   if (mode === "rag") {
-    const queryEmbedding = await embedText(question);
-    sources = await searchSimilar(queryEmbedding, 4);
+    const documents = await listDocuments();
+    const settings = await getRetrievalSettings();
+    filter = documentFilter(question, documents, options.docId);
+    const recent = history
+      .filter((m) => m.role === "user")
+      .slice(-2)
+      .map((m) => m.text)
+      .join(" ");
+    const retrievalQuery = `${recent} ${question}`.trim().slice(0, 1200);
+    const queryEmbedding = await embedText(retrievalQuery);
+    const candidates = await searchSimilar(queryEmbedding, settings.candidateCount, filter);
+    const reranked = rerank(retrievalQuery, candidates, settings.topK, settings.lexicalWeight);
+    sources = trimSources(reranked).sources;
   }
 
   const context = buildContext(sources);
-  const answer = await generateAnswer(question, context, mode, sources);
+  const answer = await generateAnswer(question, context, mode, sources, history);
   const latencyMs = Date.now() - start;
 
   return {
     answer,
     mode,
     latencyMs,
+    filter: filter.docName || null,
     sources: sources.map((s) => ({
       docName: s.docName,
       chunkIndex: s.chunkIndex,

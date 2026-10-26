@@ -8,6 +8,15 @@ import {
   listDocuments,
   stats,
 } from "./rag/pipeline.js";
+import { evaluateRetrieval, optimizeRetrieval } from "./rag/eval.js";
+import {
+  appendTurn,
+  createConversation,
+  deleteConversation,
+  getConversation,
+  listConversations,
+  updateConversation,
+} from "./rag/conversations.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -48,6 +57,84 @@ app.post("/api/documents", upload.single("file"), async (req, res) => {
 app.delete("/api/documents/:id", async (req, res) => {
   await deleteDocument(req.params.id);
   res.json({ ok: true });
+});
+
+app.get("/api/conversations", async (_req, res) => {
+  res.json(await listConversations());
+});
+
+app.post("/api/conversations", async (_req, res) => {
+  res.status(201).json(await createConversation());
+});
+
+app.get("/api/conversations/:id", async (req, res) => {
+  const conversation = await getConversation(req.params.id);
+  if (!conversation) return res.status(404).json({ error: "Chat not found" });
+  res.json(conversation);
+});
+
+app.patch("/api/conversations/:id", async (req, res) => {
+  const conversation = await updateConversation(req.params.id, req.body || {});
+  if (!conversation) return res.status(404).json({ error: "Chat not found" });
+  res.json(conversation);
+});
+
+app.delete("/api/conversations/:id", async (req, res) => {
+  await deleteConversation(req.params.id);
+  res.json({ ok: true });
+});
+
+app.post("/api/conversations/:id/messages", async (req, res) => {
+  try {
+    const { question, mode = "rag" } = req.body;
+    if (!question?.trim()) {
+      return res.status(400).json({ error: "Question is required" });
+    }
+
+    const existing = await getConversation(req.params.id);
+    if (!existing) return res.status(404).json({ error: "Chat not found" });
+
+    const history = existing.messages.map((m) => ({ role: m.role, text: m.text }));
+    const result = await askQuestion(question.trim(), mode, history, {
+      docId: req.body.docId || "",
+    });
+    const conversation = await appendTurn(req.params.id, {
+      question: question.trim(),
+      answer: result.answer,
+      sources: result.sources,
+      mode: result.mode,
+      latencyMs: result.latencyMs,
+    });
+
+    res.json({ ...result, conversation });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Ask failed" });
+  }
+});
+
+app.post("/api/eval", async (_req, res) => {
+  try {
+    const report = await evaluateRetrieval();
+    if (!report.questions) {
+      return res.status(400).json({ error: "Upload a document before checking retrieval." });
+    }
+    res.json(report);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Eval failed" });
+  }
+});
+
+app.post("/api/optimize", async (_req, res) => {
+  try {
+    const result = await optimizeRetrieval();
+    if (result.error) return res.status(400).json({ error: result.error });
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Optimize failed" });
+  }
 });
 
 app.post("/api/ask", async (req, res) => {
