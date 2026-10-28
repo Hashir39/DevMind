@@ -240,7 +240,7 @@ export default function App() {
                 </div>
               )}
 
-              <div className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+              <div className="sidebar-scroll min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                 <div className="mx-auto max-w-2xl space-y-6">
                   {messages.map((msg, i) => (
                     <ChatMessage

@@ -26,7 +26,7 @@ export default function CitationsPanel({ sources, visible }) {
           {sources.length} passages retrieved from your documents
         </p>
       </div>
-      <div className="flex-1 space-y-3 overflow-y-auto p-3">
+      <div className="sidebar-scroll flex-1 space-y-3 overflow-y-auto p-3">
         {sources.map((s, i) => (
           <article
             key={i}
@@ -45,7 +45,7 @@ export default function CitationsPanel({ sources, visible }) {
                 {Math.round(s.score * 100)}%
               </span>
             </div>
-            <p className="max-h-28 overflow-y-auto whitespace-pre-wrap text-xs leading-relaxed text-[#d4d4d8]">
+            <p className="sidebar-scroll max-h-28 overflow-y-auto whitespace-pre-wrap text-xs leading-relaxed text-[#d4d4d8]">
               {formatPassage(s.excerpt)}
             </p>
           </article>

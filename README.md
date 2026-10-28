@@ -1,42 +1,72 @@
 # DocMind
 
-**DocMind** is a document-grounded Q&A system for PDFs and text files. It implements a **Retrieval-Augmented Generation (RAG)** pipeline: ingest documents, split them into passages, embed and index them, retrieve the most relevant context for each question, and generate answers with **citations**.
+DocMind is a document question-answering app. You upload a PDF, ask a question, and get an answer grounded in that file, with the matching passages shown beside the chat.
 
-Built as a full-stack NLP/LLM demo with a modern React UI and an Express API.
+It is a full-stack NLP project built around **retrieval-augmented generation (RAG)**. A large language model writes the answer. Search, storage, and scoring run on the machine that hosts the app.
 
 ---
 
 ## Features
 
-- **PDF & text upload** — Library tab; supports `.pdf`, `.txt`, `.md`
-- **RAG mode** — Retrieve passages from your corpus, then answer with Gemini using that context
-- **Baseline mode** — Same LLM **without** document retrieval (for comparison)
-- **Citations panel** — Retrieved passages shown beside the chat (file, passage index, relevance)
-- **Persistent index** — Document metadata and vectors stored on disk under `backend/data/`
-- **Embedding fallback** — Local MiniLM embeddings if Gemini embeddings are temporarily unavailable
+- Upload PDF, TXT, or Markdown in **Library**
+- **RAG** answers from retrieved passages, with citations
+- **Baseline** asks the same model with no documents, for comparison
+- Chat history with follow-up questions, rename, pin, and delete
+- Filter search to one document
+- Local rerank of retrieved passages
+- Prompt trimming so the model call stays small
+- **Compare** page with recall and precision, computed locally
 
 ---
 
-## How it works
+## How the LLM is used
 
-```
-Upload PDF → extract text → chunk (~900 chars, overlap)
-    → embed each passage → store vectors
-Question → embed query → cosine similarity → top-k passages
-    → prompt Gemini with context → answer + citations
-```
+Gemini is the only large language model. It is called once per question.
 
-| Step | Implementation |
+1. **Ingest.** Extract text from the file, split it into passages of about 900 characters with 150 characters of overlap, embed each passage, and save the vectors.
+2. **Retrieve.** Embed the question (plus the last two user messages for follow-ups). Rank passages with cosine similarity. A local word-overlap step reorders them. The best few passages are kept.
+3. **Generate.** Those passages, the system instruction, and recent chat turns are sent to Gemini. The model must answer from that context and cite sources as `[Source 1]`.
+4. **Baseline.** The same Gemini call is made with no passages attached.
+
+Chat models, tried in order if one is busy: `gemini-3.5-flash`, `gemini-3.1-flash-lite`, `gemini-flash-lite-latest`, `gemini-3.8-flash`.
+
+Embeddings use `gemini-embedding-001`. If that call fails, a local MiniLM model (`Xenova/all-MiniLM-L6-v2`) creates the vectors instead. Passages and questions must use the same embedding model, so re-upload files after an embedding change.
+
+| Step | Where it lives |
 |------|----------------|
 | Chunking | LangChain `RecursiveCharacterTextSplitter` |
-| Embeddings | Google Gemini (`gemini-embedding-001`) or local `@xenova/transformers` |
-| Vector store | JSON-backed store with cosine similarity (`backend/src/rag/store.js`) |
-| Generation | Google `@google/genai` SDK (`gemini-flash-latest` with model fallbacks) |
+| Embeddings | `backend/src/rag/embeddings.js` |
+| Vector store | JSON files and cosine similarity in `backend/src/rag/store.js` |
+| Rerank, filter | `backend/src/rag/rerank.js` |
+| Context limit | `backend/src/rag/context.js` |
+| Generation | `backend/src/rag/gemini.js` |
+| Recall / precision | `backend/src/rag/eval.js` (no Gemini call) |
 
-### RAG vs Baseline
+---
 
-- **RAG** — Uses only retrieved document passages + citations. Best for questions about **your** files.
-- **Baseline** — Direct LLM call with no retrieval. Useful to compare hallucination vs grounded answers in reports and demos.
+## API key
+
+One key only.
+
+| Name | What it is |
+|------|------------|
+| `GEMINI_API_KEY` | Google AI Studio key, in `backend/.env` |
+
+The server reads it at startup. It is not written in source code and `.env` is gitignored. There is no OpenAI key, no login provider, and no database password.
+
+---
+
+## Offline behavior
+
+The UI and API run on localhost. A normal written answer needs the internet, because Gemini is a hosted model.
+
+These parts do not call Gemini:
+
+- Saving and listing documents and chats (JSON files under `backend/data/`)
+- Splitting text, cosine search, rerank, and the document filter
+- The retrieval check and local tune on the Compare page
+
+If the key is missing or Gemini cannot be reached, the app still returns short excerpts from the retrieved passages. That is a search fallback, not a model-written answer.
 
 ---
 
@@ -44,24 +74,16 @@ Question → embed query → cosine similarity → top-k passages
 
 | Layer | Technologies |
 |-------|----------------|
-| Frontend | React 19, Vite, Tailwind CSS 4, React Markdown |
+| Frontend | React 19, Vite, Tailwind CSS 4 |
 | Backend | Node.js, Express, Multer, pdf-parse |
-| AI | Google Gemini API (AI Studio keys, including `AQ.` auth keys) |
-| NLP utilities | LangChain text splitters, optional local embeddings |
-
----
-
-## Prerequisites
-
-- **Node.js** 20+ (24 recommended)
-- **Google AI Studio API key** — [Create a key](https://aistudio.google.com/api-keys)  
-  New keys may start with `AQ.` (auth key) or `AIzaSy…` (legacy). DocMind uses the official **`@google/genai`** SDK, which supports both.
+| LLM | Google Gemini through `@google/genai` |
+| NLP | LangChain text splitter, local MiniLM embeddings |
 
 ---
 
 ## Setup
 
-### 1. Backend environment
+Node.js 20 or newer. Create a key at [Google AI Studio](https://aistudio.google.com/api-keys).
 
 Create `backend/.env`:
 
@@ -70,69 +92,55 @@ GEMINI_API_KEY=your_key_here
 PORT=4000
 ```
 
-Do not commit `.env` to git.
-
-### 2. Install dependencies
-
-**Backend:**
+Install and run the API:
 
 ```bash
 cd docmind/backend
 npm install
-```
-
-**Frontend:**
-
-```bash
-cd docmind/frontend
-npm install
-```
-
-### 3. Run
-
-Terminal 1 — API (port **4000**):
-
-```bash
-cd docmind/backend
 npm start
 ```
 
-You should see `Gemini key: AQ auth key (AI Studio)` or similar when the key is loaded.
-
-Terminal 2 — UI (port **5174**):
+Install and run the UI:
 
 ```bash
 cd docmind/frontend
+npm install
 npm run dev
 ```
 
-Open **http://localhost:5174**
+Open http://localhost:5174. The API listens on port 4000.
 
 ---
 
-## Using the app
+## Demo flow
 
-1. **Library** — Upload PDFs (e.g. sample files in the parent `NLP` folder).
-2. **Chat → RAG** — Ask questions about your documents; read the answer in the center and **Citations** on the right.
-3. **Chat → Baseline** — Ask the same question without retrieval to compare behavior.
-4. **Compare** — Short reference table for reports and viva.
-
-**Tips**
-
-- After changing `GEMINI_API_KEY` or embedding settings, **restart the backend** and **re-upload** PDFs so passages use one consistent embedding model.
-- If Gemini returns “high demand” (503), retry after a minute; the app may show a retrieval-based summary until the model responds.
+1. **Library** — upload a PDF and wait until it is indexed.
+2. **Chat** — leave the mode on RAG and ask a question about that file. Citations appear on the right.
+3. Switch to **Baseline** and ask the same question to show the difference.
+4. Open an older chat in the sidebar and ask a follow-up.
+5. **Compare** — click **Check retrieval**. Recall is how often the right passage was in the top results. Precision is how many of those results were actually relevant. This check uses 0 Gemini tokens.
 
 ---
 
-## API (local)
+## API
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/health` | Status, document count, passage count |
-| GET | `/api/documents` | List indexed documents |
-| POST | `/api/documents` | Upload file (`multipart/form-data`, field `file`) |
-| DELETE | `/api/documents/:id` | Remove document and its vectors |
-| POST | `/api/ask` | Body: `{ "question": "...", "mode": "rag" \| "baseline" }` |
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | `/api/health` | Document and passage counts |
+| GET | `/api/documents` | List indexed files |
+| POST | `/api/documents` | Upload (`multipart` field `file`) |
+| DELETE | `/api/documents/:id` | Remove a file and its vectors |
+| GET | `/api/conversations` | List chats |
+| POST | `/api/conversations` | Start a chat |
+| GET | `/api/conversations/:id` | Load one chat |
+| PATCH | `/api/conversations/:id` | Rename or pin |
+| DELETE | `/api/conversations/:id` | Delete a chat |
+| POST | `/api/conversations/:id/messages` | Ask in a chat. Body: `{ question, mode, docId }` |
+| POST | `/api/eval` | Local recall and precision |
+| POST | `/api/optimize` | Pick top-K from those local scores |
+| POST | `/api/ask` | One-off question, no saved chat |
+
+`mode` is `rag` or `baseline`.
 
 ---
 
@@ -141,35 +149,33 @@ Open **http://localhost:5174**
 ```
 docmind/
 ├── backend/
-│   ├── .env                 # GEMINI_API_KEY (not in git)
-│   ├── data/                # Indexed documents + vectors (generated)
+│   ├── .env
+│   ├── data/                 # documents, vectors, chats (generated)
 │   └── src/
-│       ├── index.js         # Express server
+│       ├── index.js
 │       └── rag/
-│           ├── pipeline.js  # Ingest, ask, RAG logic
-│           ├── gemini.js    # Gemini chat + embed
+│           ├── pipeline.js
+│           ├── gemini.js
 │           ├── embeddings.js
-│           └── store.js     # Vector storage + search
+│           ├── store.js
+│           ├── rerank.js
+│           ├── context.js
+│           ├── eval.js
+│           ├── conversations.js
+│           └── retrievalSettings.js
 └── frontend/
     └── src/
         ├── App.jsx
-        └── components/      # Chat, citations, avatar
+        ├── api.js
+        └── components/
 ```
 
 ---
 
-## Production build (frontend)
+## Frontend production build
 
 ```bash
 cd docmind/frontend
 npm run build
 npm run preview
 ```
-
-The backend can serve `frontend/dist` if configured for deployment; default dev setup uses Vite on 5174 and API on 4000.
-
----
-
-## License
-
-Academic / project use — adjust as needed for your institution.
