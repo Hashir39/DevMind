@@ -114,7 +114,7 @@ export default function Sidebar({
         <DocMindMark className="h-10 w-10 shadow-[0_0_20px_rgba(124,92,252,0.4)]" />
         <div className="min-w-0">
           <p className="font-display text-[17px] font-semibold leading-none tracking-tight text-white">
-            DocMind
+            DevMind
           </p>
           <p className="mt-1 text-[11px] text-[#a1a1aa]">Document Q&A</p>
         </div>
