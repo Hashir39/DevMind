@@ -1,3 +1,7 @@
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import "./loadEnv.js";
 import express from "express";
 import cors from "cors";
 import multer from "multer";
@@ -20,6 +24,10 @@ import {
 
 const app = express();
 const port = process.env.PORT || 4000;
+const frontendDist = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../frontend/dist"
+);
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 12 * 1024 * 1024 },
@@ -154,7 +162,15 @@ app.post("/api/ask", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+if (fs.existsSync(path.join(frontendDist, "index.html"))) {
+  app.use(express.static(frontendDist));
+  app.use((req, res, next) => {
+    if (req.method !== "GET" || req.path.startsWith("/api")) return next();
+    res.sendFile(path.join(frontendDist, "index.html"));
+  });
+}
+
+app.listen(port, "0.0.0.0", () => {
   const key = process.env.GEMINI_API_KEY?.trim() ?? "";
   const keyHint = key.startsWith("AQ.")
     ? "AQ auth key (AI Studio)"
@@ -163,6 +179,6 @@ app.listen(port, () => {
       : key
         ? "custom key format"
         : "missing";
-  console.log(`DocMind API running on http://localhost:${port}`);
+  console.log(`DocMind running on http://localhost:${port}`);
   console.log(`Gemini key: ${key ? keyHint : "NOT SET — add GEMINI_API_KEY to .env"}`);
 });

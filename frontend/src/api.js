@@ -1,4 +1,4 @@
-const API = "http://localhost:4000/api";
+const API = "/api";
 
 export async function getHealth() {
   const res = await fetch(`${API}/health`);
