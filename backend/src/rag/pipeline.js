@@ -133,14 +133,14 @@ async function generateAnswer(question, context, mode, sources, history) {
     if (mode === "baseline") {
       return await geminiGenerate({
         system:
-          "You are DocMind, a helpful assistant. Answer clearly and concisely. Use earlier messages in this chat when the user asks a follow-up.",
+          "You are DevMind, a helpful assistant. Answer clearly and concisely. Use earlier messages in this chat when the user asks a follow-up.",
         user: question,
         history: trimmedHistory,
       });
     }
 
     return await geminiGenerate({
-      system: `You are DocMind, a document-grounded research assistant.
+      system: `You are DevMind, a document-grounded research assistant.
 Answer using the retrieved context below. If the user asks a follow-up, also use the earlier chat.
 If the documents do not contain the answer, say so.
 Cite sources inline like [Source 1], [Source 2] when used.

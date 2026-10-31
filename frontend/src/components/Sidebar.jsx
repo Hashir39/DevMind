@@ -69,6 +69,8 @@ export default function Sidebar({
   chats,
   activeChatId,
   apiOnline,
+  mobileOpen,
+  onClose,
   onNewChat,
   onOpenChat,
   onDeleteChat,
@@ -91,6 +93,15 @@ export default function Sidebar({
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
+    const onKey = (event) => {
+      if (event.key === "Escape") onClose?.();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [mobileOpen, onClose]);
+
   const openMenu = (event, chat) => {
     event.stopPropagation();
     const rect = event.currentTarget.getBoundingClientRect();
@@ -109,15 +120,38 @@ export default function Sidebar({
   };
 
   return (
-    <aside className="relative z-10 flex h-full w-[292px] shrink-0 flex-col border-r border-white/8 bg-[#0c0c0e] text-[#f4f4f5]">
+    <>
+    {mobileOpen && (
+      <button
+        type="button"
+        className="fixed inset-0 z-30 bg-black/60 md:hidden"
+        aria-label="Close menu"
+        onClick={onClose}
+      />
+    )}
+    <aside
+      className={`fixed inset-y-0 left-0 z-40 flex h-full w-[min(292px,88vw)] shrink-0 flex-col border-r border-white/8 bg-[#0c0c0e] text-[#f4f4f5] transition-transform duration-200 md:static md:z-10 md:w-[292px] md:translate-x-0 ${
+        mobileOpen ? "translate-x-0" : "-translate-x-full"
+      }`}
+    >
       <div className="flex items-center gap-3 px-4 pb-4 pt-5">
         <DocMindMark className="h-10 w-10 shadow-[0_0_20px_rgba(124,92,252,0.4)]" />
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="font-display text-[17px] font-semibold leading-none tracking-tight text-white">
             DevMind
           </p>
           <p className="mt-1 text-[11px] text-[#a1a1aa]">Document Q&A</p>
         </div>
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-lg p-1.5 text-[#a1a1aa] hover:bg-white/8 hover:text-white md:hidden"
+          aria-label="Close menu"
+        >
+          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          </svg>
+        </button>
       </div>
 
       <div className="px-3">
@@ -128,7 +162,10 @@ export default function Sidebar({
               <button
                 key={item.id}
                 type="button"
-                onClick={() => setView(item.id)}
+                onClick={() => {
+                  setView(item.id);
+                  onClose?.();
+                }}
                 className={`flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] font-medium transition ${
                   active
                     ? "bg-[#7c5cfc] text-white shadow-[0_0_16px_rgba(124,92,252,0.35)]"
@@ -146,7 +183,10 @@ export default function Sidebar({
       <div className="px-3 pt-3">
         <button
           type="button"
-          onClick={onNewChat}
+          onClick={() => {
+            onNewChat();
+            onClose?.();
+          }}
           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#7c5cfc] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(124,92,252,0.28)] transition hover:bg-[#6d4ef0]"
         >
           <span className="text-base leading-none">+</span>
@@ -203,7 +243,10 @@ export default function Sidebar({
                         ) : (
                           <button
                             type="button"
-                            onClick={() => onOpenChat(chat.id)}
+                            onClick={() => {
+                              onOpenChat(chat.id);
+                              onClose?.();
+                            }}
                             className={`w-full rounded-xl px-3 py-2.5 pr-16 text-left transition ${
                               active
                                 ? "bg-white/8 text-white ring-1 ring-white/10"
@@ -232,7 +275,7 @@ export default function Sidebar({
                             className={`absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center ${
                               chat.pinned || menu?.id === chat.id
                                 ? "opacity-100"
-                                : "opacity-0 group-hover:opacity-100"
+                                : "opacity-100 md:opacity-0 md:group-hover:opacity-100"
                             }`}
                           >
                             <button
@@ -337,5 +380,6 @@ export default function Sidebar({
         </div>
       )}
     </aside>
+    </>
   );
 }

@@ -42,7 +42,7 @@ app.use(express.json());
 
 app.get("/api/health", async (_req, res) => {
   const s = await stats();
-  res.json({ ok: true, name: "DocMind", ...s });
+  res.json({ ok: true, name: "DevMind", ...s });
 });
 
 app.get("/api/documents", async (_req, res) => {
@@ -179,6 +179,6 @@ app.listen(port, "0.0.0.0", () => {
       : key
         ? "custom key format"
         : "missing";
-  console.log(`DocMind running on http://localhost:${port}`);
+  console.log(`DevMind running on http://localhost:${port}`);
   console.log(`Gemini key: ${key ? keyHint : "NOT SET — add GEMINI_API_KEY to .env"}`);
 });

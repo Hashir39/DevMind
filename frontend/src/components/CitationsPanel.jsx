@@ -19,14 +19,14 @@ export default function CitationsPanel({ sources, visible }) {
   }
 
   return (
-    <aside className="flex w-full shrink-0 flex-col border-t border-white/8 bg-[#0c0c0e] lg:w-80 lg:border-l lg:border-t-0 xl:flex">
+    <aside className="flex max-h-[42vh] w-full min-h-0 shrink-0 flex-col overflow-hidden border-t border-white/8 bg-[#0c0c0e] lg:h-full lg:max-h-none lg:w-80 lg:border-l lg:border-t-0">
       <div className="border-b border-white/8 px-4 py-3">
         <h2 className="text-sm font-semibold text-white">Citations</h2>
         <p className="mt-0.5 text-xs text-[#a1a1aa]">
           {sources.length} passages retrieved from your documents
         </p>
       </div>
-      <div className="sidebar-scroll flex-1 space-y-3 overflow-y-auto p-3">
+      <div className="sidebar-scroll min-h-0 flex-1 space-y-3 overflow-y-auto p-3">
         {sources.map((s, i) => (
           <article
             key={i}
