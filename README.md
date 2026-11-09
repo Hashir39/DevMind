@@ -1,8 +1,24 @@
-# DocMind
+# DevMind
 
-DocMind is a document question-answering app. You upload a PDF, ask a question, and get an answer grounded in that file, with the matching passages shown beside the chat.
+DevMind is a document question-answering app. You upload a PDF, ask a question, and get an answer grounded in that file, with the matching passages shown beside the chat.
 
 It is a full-stack NLP project built around **retrieval-augmented generation (RAG)**. A large language model writes the answer. Search, storage, and scoring run on the machine that hosts the app.
+
+---
+
+## Pipeline
+
+![DevMind RAG pipeline](DevMind-RAG-Pipeline.png)
+
+A question starts at **User goal** and moves down the chart.
+
+1. **Data sources** are the files you upload: PDF, TXT, or Markdown.
+2. **Parsing and chunking** turns a PDF into text with pdf-parse, then splits that text into overlapping passages.
+3. **Embeddings** turn each passage into numbers. Gemini does this. If that call fails, a local MiniLM model does it instead.
+4. **Vector store** saves those numbers in JSON files and finds the closest passages with cosine similarity.
+5. **Retrieval** reranks those passages by word overlap, can limit the search to one document, and keeps only the top few.
+6. **Generation** sends those passages to Gemini, which writes the answer and citations. **Baseline** asks Gemini with no passages attached.
+7. **Evals** scores recall and precision on your machine and picks a top-K setting. That step does not call Gemini.
 
 ---
 
