@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>DevMind — Project Documentation</title>
+<style>
+  @page {
+    size: A4;
+    margin: 16mm 16mm 18mm 16mm;
+    @bottom-center {
+      content: counter(page);
+      font-family: "Times New Roman", Times, serif;
+      font-size: 10.5pt;
+      color: #222;
+    }
+  }
+  @page:first {
+    margin: 0;
+    @bottom-center { content: none; }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.45;
+    color: #111;
+    background: white;
+  }
+
+  .cover {
+    width: 210mm;
+    height: 297mm;
+    padding: 18mm 20mm 24mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    page-break-after: always;
+    break-after: page;
+    background: #fff;
+  }
+  .emblem { width: 42mm; height: auto; margin-top: 10mm; }
+  .uni {
+    margin: 7mm 0 0;
+    padding: 0;
+    border: none;
+    font-size: 18.5pt;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-align: center;
+  }
+  .kind {
+    margin: 18mm 0 0;
+    font-size: 15pt;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-align: center;
+  }
+  .cover-title {
+    margin: 14mm 0 0;
+    text-align: center;
+    font-size: 13.5pt;
+    font-weight: 700;
+  }
+  .cover-sub {
+    margin: 2mm 0 0;
+    text-align: center;
+    font-size: 12pt;
+    font-weight: 400;
+    max-width: 150mm;
+  }
+  .meta {
+    margin-top: 22mm;
+    width: 132mm;
+    font-size: 12.5pt;
+    line-height: 1.55;
+  }
+  .meta p { margin: 0 0 1.5mm; }
+  .meta .gap { margin-top: 5mm; }
+
+  h1 {
+    font-size: 16pt;
+    margin: 0 0 8pt;
+    padding-bottom: 3pt;
+    border-bottom: 1.5pt solid #111;
+    page-break-after: avoid;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: 13.5pt;
+    margin: 13pt 0 4pt;
+    page-break-after: avoid;
+    line-height: 1.25;
+  }
+  h3 {
+    font-size: 12.5pt;
+    margin: 10pt 0 3pt;
+    page-break-after: avoid;
+  }
+  p { margin: 0 0 8pt; text-align: justify; hyphens: auto; }
+  ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
+  li { margin: 0 0 3pt; text-align: justify; }
+  strong { font-weight: 700; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0 10pt;
+    font-size: 10.5pt;
+    line-height: 1.3;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 0.6pt solid #333;
+    padding: 3.5pt 5pt;
+    vertical-align: top;
+    text-align: left;
+  }
+  th { background: #f2f2f2; font-weight: 700; }
+  caption {
+    caption-side: bottom;
+    font-size: 10pt;
+    font-style: italic;
+    text-align: center;
+    margin-top: 3pt;
+    padding-bottom: 4pt;
+  }
+
+  figure {
+    margin: 8pt 0 10pt;
+    page-break-inside: avoid;
+    text-align: center;
+  }
+  figure img { width: 100%; max-height: 175mm; object-fit: contain; }
+  figcaption {
+    font-size: 10pt;
+    font-style: italic;
+    margin-top: 3pt;
+    text-align: center;
+  }
+
+  pre, code { font-family: Consolas, "Courier New", monospace; }
+  pre {
+    font-size: 9pt;
+    line-height: 1.32;
+    background: #f6f6f6;
+    border: 0.6pt solid #ccc;
+    padding: 6pt 8pt;
+    margin: 4pt 0 10pt;
+    white-space: pre-wrap;
+    page-break-inside: avoid;
+  }
+  code { font-size: 10pt; }
+  p code, li code, td code { font-size: 10pt; }
+
+  .toc { margin: 0; padding: 0; list-style: none; }
+  .toc li {
+    margin: 0;
+    padding: 2.5pt 0;
+    border-bottom: 0.4pt dotted #bbb;
+    text-align: left;
+  }
+  .toc .sub { padding-left: 14pt; font-size: 11.5pt; }
+  .small { font-size: 11pt; }
+
+  .formula {
+    text-align: center;
+    font-style: italic;
+    margin: 6pt 16pt 8pt;
+    page-break-inside: avoid;
+  }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <img class="emblem" src="uok-emblem.png" alt="University of Karachi emblem" />
+  <h1 class="uni">UNIVERSITY OF KARACHI</h1>
+  <p class="kind">PROJECT DOCUMENTATION</p>
+  <p class="cover-title">DevMind</p>
+  <p class="cover-sub">A Document Question-Answering System Using Retrieval-Augmented Generation</p>
+  <div class="meta">
+    <p><strong>Name:</strong> Hafiz Muhammad Hashir</p>
+    <p><strong>Roll number:</strong> B22110006042</p>
+    <p class="gap"><strong>Name:</strong> Wasi Uz Zafar Khan</p>
+    <p><strong>Roll number:</strong> B22110006124</p>
+    <p class="gap"><strong>Project:</strong> DevMind</p>
+    <p><strong>Document:</strong> Project documentation</p>
+  </div>
+</section>
+
+<h1>Abstract</h1>
+<p>
+DevMind is a full-stack natural language processing application for question answering over a user’s own files. A person uploads a PDF, plain-text file, or Markdown file, asks a question in a chat, and receives an answer written from the passages that the system retrieved from that file. Matching passages are shown beside the chat so the answer can be checked against the source.
+</p>
+<p>
+The design follows retrieval-augmented generation. Search, storage, chunking, reranking, and scoring run on the machine that hosts the application. Google Gemini writes the answer and, when it is available, also builds the embedding vectors used for search. If the embedding call fails, a local MiniLM model creates the vectors instead. A separate baseline mode asks the same language model with no passages attached, so the effect of retrieval can be compared with an ungrounded answer. A Compare page measures recall and precision of a local retrieval check and can choose a top-K setting from those scores. That check does not call Gemini.
+</p>
+<p>
+This report describes the problem the project addresses, the ideas it depends on, the requirements, the architecture, and the implementation of each module. It also records the HTTP interface, the setup procedure, the evaluation method, the limits of the current system, and the work that would extend it. The description matches the source code in the DevMind repository: a React and Vite client, a Node.js and Express server, and JSON files used as the document, vector, and conversation store.
+</p>
+
+<h1>Table of Contents</h1>
+<ol class="toc">
+  <li>1. Introduction</li>
+  <li class="sub">1.1 Background</li>
+  <li class="sub">1.2 Problem statement</li>
+  <li class="sub">1.3 Objectives</li>
+  <li class="sub">1.4 Scope</li>
+  <li class="sub">1.5 Organisation of the report</li>
+  <li>2. Background</li>
+  <li class="sub">2.1 Question answering and grounding</li>
+  <li class="sub">2.2 Retrieval-augmented generation</li>
+  <li class="sub">2.3 Embeddings and cosine similarity</li>
+  <li class="sub">2.4 Chunking</li>
+  <li class="sub">2.5 Lexical overlap and reranking</li>
+  <li class="sub">2.6 Recall, precision, and F1</li>
+  <li>3. Requirements</li>
+  <li class="sub">3.1 Users and usage</li>
+  <li class="sub">3.2 Functional requirements</li>
+  <li class="sub">3.3 Non-functional requirements</li>
+  <li class="sub">3.4 Constraints</li>
+  <li>4. System design</li>
+  <li class="sub">4.1 Architecture</li>
+  <li class="sub">4.2 Pipeline</li>
+  <li class="sub">4.3 Technology stack</li>
+  <li class="sub">4.4 Data stored on disk</li>
+  <li class="sub">4.5 Module map</li>
+  <li>5. Implementation</li>
+  <li class="sub">5.1 Server and configuration</li>
+  <li class="sub">5.2 Ingestion and chunking</li>
+  <li class="sub">5.3 Embeddings</li>
+  <li class="sub">5.4 Vector store and search</li>
+  <li class="sub">5.5 Retrieval, filter, and rerank</li>
+  <li class="sub">5.6 Generation, citations, and fallback</li>
+  <li class="sub">5.7 Conversations</li>
+  <li class="sub">5.8 Context limits</li>
+  <li class="sub">5.9 Frontend</li>
+  <li>6. Application programming interface</li>
+  <li>7. Evaluation</li>
+  <li class="sub">7.1 What is measured</li>
+  <li class="sub">7.2 How questions are built</li>
+  <li class="sub">7.3 Scoring</li>
+  <li class="sub">7.4 Local tuning</li>
+  <li class="sub">7.5 How to read the scores</li>
+  <li>8. Installation and demonstration</li>
+  <li class="sub">8.1 Requirements</li>
+  <li class="sub">8.2 Configuration</li>
+  <li class="sub">8.3 Running the system</li>
+  <li class="sub">8.4 Demonstration script</li>
+  <li class="sub">8.5 Production build</li>
+  <li>9. Discussion</li>
+  <li class="sub">9.1 Design choices</li>
+  <li class="sub">9.2 Limitations</li>
+  <li class="sub">9.3 Future work</li>
+  <li>10. Conclusion</li>
+  <li>References</li>
+  <li>Appendix A. Project structure</li>
+  <li>Appendix B. Default parameters</li>
+</ol>
+
+<h1>1. Introduction</h1>
+
+<h2>1.1 Background</h2>
+<p>
+Large language models can write fluent answers to open questions. Their knowledge is the knowledge captured during training, and they have no automatic access to a PDF that a student, researcher, or developer uploaded a minute earlier. When the needed fact lives only in that file, an answer written from model memory alone can be incomplete or simply wrong. The usual remedy is to retrieve relevant text first and then ask the model to write from that text. This pattern is called retrieval-augmented generation, or RAG.
+</p>
+<p>
+DevMind applies that pattern to a small, local document library. The library is not the open web. It is the set of files the user has uploaded in the current installation. The application extracts text, splits it into overlapping passages, turns each passage into a vector, and stores the vectors in JSON files. At question time it embeds the question, finds the nearest passages, reorders them with a word-overlap score, and sends the best few passages to Gemini together with a short instruction to cite them. The interface keeps the conversation, shows the passages, and offers a baseline call that omits the passages.
+</p>
+<p>
+The project sits at the meeting point of information retrieval and generation. Retrieval decides which sentences are worth reading. Generation turns those sentences into a direct answer. DevMind keeps both steps visible: the answer is in the chat, and the passages that supported the search are in a side panel. A third view, Compare, states the practical difference between a grounded answer and an ungrounded one, and it runs a local retrieval check whose token cost is zero.
+</p>
+
+<h2>1.2 Problem statement</h2>
+<p>
+People who work from long documents need answers that stay inside those documents. Reading a full PDF for every small question is slow. Pasting the whole file into a chat window is often impossible, because models accept a limited amount of text, and a long paste also mixes the question with pages that are irrelevant. A useful tool has to select a short, relevant context, answer from it, and show where the wording came from.
+</p>
+<p>
+The problem addressed by DevMind is therefore: given one or more uploaded documents and a natural-language question, return a concise answer grounded in those documents, together with the passages used, and allow the same question to be asked again with no documents so the two behaviours can be compared. The system must also remember the chat, support a follow-up that depends on earlier turns, and keep working in a reduced way when the hosted model cannot be reached.
+</p>
+
+<h2>1.3 Objectives</h2>
+<p>The project was built to meet the following objectives.</p>
+<ol>
+  <li>Accept PDF, TXT, and Markdown uploads and turn them into searchable passages.</li>
+  <li>Embed passages and questions, and retrieve the closest passages with cosine similarity.</li>
+  <li>Rerank the candidates with lexical overlap and keep a small top-K set.</li>
+  <li>Generate an answer with Gemini that cites the retrieved passages, and provide a baseline mode with no passages.</li>
+  <li>Persist documents, vectors, retrieval settings, and conversations on the local machine.</li>
+  <li>Support multi-turn chat with rename, pin, and delete, and allow the search to be limited to one document.</li>
+  <li>Score retrieval with recall and precision on the machine itself, and pick a top-K and lexical weight from those scores.</li>
+  <li>Expose the behaviour through a small HTTP API and a web interface.</li>
+</ol>
+
+<h2>1.4 Scope</h2>
+<p>
+DevMind is a single-user application that runs on localhost. It indexes the files uploaded to that installation. It does not crawl the web, it does not require an account, and it does not use a separate database server. Authentication, multi-user permissions, and cloud deployment are outside the present scope. The language model is Gemini, reached with one API key stored in <code>backend/.env</code>. Embeddings prefer the same provider and fall back to <code>Xenova/all-MiniLM-L6-v2</code> on the server. Evaluation covers retrieval against passages drawn from the uploaded files. It does not call Gemini and it does not claim a score for answer quality.
+</p>
+<p>
+Supported inputs are PDF files read with pdf-parse, and UTF-8 text or Markdown. Scanned pages that contain no extractable text are outside the current extractor. Upload size is limited to 12 megabytes. The interface is a React application served in development by Vite on port 5174, with the API on port 4000.
+</p>
+
+<h2>1.5 Organisation of the report</h2>
+<p>
+Chapter 2 reviews the ideas the system uses: grounded question answering, RAG, embeddings, cosine similarity, chunking, lexical reranking, and the retrieval metrics. Chapter 3 lists requirements. Chapter 4 describes the architecture, the pipeline, the stack, and the files on disk. Chapter 5 walks through the implementation module by module. Chapter 6 lists the HTTP API. Chapter 7 explains the evaluation and the local tuner. Chapter 8 gives installation steps and a demonstration script. Chapter 9 discusses design choices, limits, and future work. Chapter 10 concludes. Two appendices record the repository layout and the default numeric parameters.
+</p>
+
+<h1>2. Background</h1>
+
+<h2>2.1 Question answering and grounding</h2>
+<p>
+Question answering is the task of returning a direct answer to a question written in natural language. Early systems looked up a passage and extracted a span from it. Generative systems write a new sentence. Generation is flexible, and it is also free to introduce statements that were never in the source. Grounding is the requirement that the answer stay tied to evidence the system can show. In DevMind that evidence is a small set of passages from the user’s files, labelled Source 1, Source 2, and so on, both inside the model instruction and in the citations panel.
+</p>
+<p>
+A grounded system still depends on the retriever. If the right passage is missing from the context, the model is instructed to say that the documents do not contain the answer. That instruction reduces silent invention, and it only works when the prompt actually contains the instruction and the retrieved text. DevMind puts both into the system instruction for RAG mode. Baseline mode uses a shorter instruction and sends no document context, which is the behaviour expected of a general chat model.
+</p>
+
+<h2>2.2 Retrieval-augmented generation</h2>
+<p>
+Lewis and colleagues introduced retrieval-augmented generation as a way to give a generator access to a non-parametric memory: a collection of documents retrieved at question time, rather than facts stored only in model weights. The generator conditions on the retrieved text. Updating the collection updates what the system can answer, without retraining the model. That property matches a document tool. The user adds a PDF, and the next question can use it.
+</p>
+<p>
+A practical RAG pipeline has a preparation stage and a query stage. Preparation parses the file, splits the text, embeds the pieces, and stores them. The query stage embeds the question, searches, optionally reranks, builds a context string, and calls the generator. DevMind follows this split. Ingestion is triggered by <code>POST /api/documents</code>. Answering is triggered by a chat message or by <code>POST /api/ask</code>. Evaluation is a third path that never enters the generator.
+</p>
+<p>
+Surveys of RAG systems describe the same stages with extra options DevMind deliberately leaves out: query rewriting by another model call, multi-hop retrieval, and a second model used only as a reranker. DevMind keeps one model call for the answer. Reranking is a local formula over word overlap. The aim is a pipeline that can be explained from the source file that implements it, and that still returns a usable answer on a student machine.
+</p>
+
+<h2>2.3 Embeddings and cosine similarity</h2>
+<p>
+An embedding maps a piece of text to a list of numbers. Texts with similar meaning land closer together than unrelated texts, when the embedding model has been trained for that. DevMind uses <code>gemini-embedding-001</code> when the API key works. The fallback is MiniLM through the Transformers.js package, model name <code>Xenova/all-MiniLM-L6-v2</code>, with mean pooling and normalisation. MiniLM is a distilled transformer used widely for sentence embeddings. The two models do not produce compatible coordinates. The store therefore compares a query vector only with passage vectors of the same length, and files should be uploaded again after the embedding model changes.
+</p>
+<p>
+Closeness is cosine similarity. For vectors <em>a</em> and <em>b</em> the score is the dot product divided by the product of the Euclidean norms:
+</p>
+<p class="formula">cos(a, b) = (a · b) / (‖a‖ ‖b‖)</p>
+<p>
+The implementation adds a tiny constant in the denominator so a zero vector cannot divide by zero. Higher cosine means a closer direction. The search sorts passages by this score and keeps a candidate pool, twelve by default, before reranking. Cosine is the dense half of retrieval. It can match a paraphrase that shares few exact words with the question. It can also rank a vaguely related passage above the sentence that actually contains the fact. The lexical reranker exists to pull exact wording back up.
+</p>
+
+<h2>2.4 Chunking</h2>
+<p>
+A full document is a poor unit of retrieval. A question is usually answered by a paragraph, and a vector of an entire chapter mixes many topics into one point. DevMind splits extracted text with LangChain’s <code>RecursiveCharacterTextSplitter</code>. The chunk size is about 900 characters and the overlap is 150 characters. Overlap keeps a sentence that sits on a boundary inside both neighbouring passages, so a fact is less likely to be cut in half and then missed.
+</p>
+<p>
+The splitter prefers natural breaks, such as paragraphs and sentences, and falls back to smaller breaks when a region is longer than the limit. After parsing, DevMind collapses runs of whitespace to a single space. That makes PDF line breaks easier to embed, and it also removes the visual line structure of the original page. Page numbers and headings survive only as the characters the extractor returned. If the cleaned text is shorter than 30 characters, ingestion stops with an error, because there is nothing useful to index.
+</p>
+
+<h2>2.5 Lexical overlap and reranking</h2>
+<p>
+Dense retrieval and word overlap answer different failures. Cosine can miss a rare name that the embedding underweights. Overlap can miss a paraphrase that uses none of the query words. DevMind combines them at rerank time. Content words are the tokens that remain after lowercasing, stripping characters other than letters and digits, dropping tokens of length two or less, and dropping a small stop list: <em>a, an, the, of, to, and, in, on, for, with, from, by, is, are, was, were, be, this, that, it, as, at, or, you, your, we, our</em>.
+</p>
+<p>
+The lexical score of a passage is the fraction of query content words that also appear in the passage. The reranked score mixes that fraction with the cosine score already stored on the candidate:
+</p>
+<p class="formula">score = (1 − λ) · cosine + λ · lexical</p>
+<p>
+The default λ, stored as <code>lexicalWeight</code>, is 0.35. Cosine therefore still dominates, and shared words can change the order inside the candidate pool. The pool is the top 12 by cosine. Reranking does not look outside that pool. After reranking, the top 4 passages are kept, unless the user has tuned a different top-K.
+</p>
+
+<h2>2.6 Recall, precision, and F1</h2>
+<p>
+Recall, in this project, is the fraction of test questions for which the passage that produced the question appears in the top-K results. Precision is the average, over questions, of the fraction of the top-K results that count as relevant. A result counts as relevant when it is the source passage, or when its word overlap with the question is at least one half. F1 is the harmonic mean of recall and precision:
+</p>
+<p class="formula">F1 = 2 · recall · precision / (recall + precision)</p>
+<p>
+When both scores are zero, F1 is defined as zero. These definitions are implemented in <code>backend/src/rag/eval.js</code> and are the scores shown on the Compare page. They describe the local ranker used by the check. They are a development signal for top-K and λ. Chapter 7 explains why they should be read as a retrieval diagnostic and not as a mark for the written answers.
+</p>
+
+<h1>3. Requirements</h1>
+
+<h2>3.1 Users and usage</h2>
+<p>
+The intended user is a person with a document and a question about it: a student checking a handout, a developer reading a specification, or anyone comparing what a model says from memory with what the file actually contains. The user works in a browser. There is no login. The library, the chats, and the retrieval settings belong to the machine where the server is running, because they are ordinary files under <code>backend/data/</code>.
+</p>
+<p>
+Three screens cover the usage. Library is where files enter and leave. Chat is where questions are asked, with a switch between RAG and Baseline and a menu that limits search to one document. Compare explains the two modes and runs the retrieval check and the tuner. The sidebar lists earlier chats and can start, open, rename, pin, or delete one.
+</p>
+
+<h2>3.2 Functional requirements</h2>
+<table>
+  <thead>
+    <tr><th>ID</th><th>Requirement</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>F1</td><td>Upload one or more PDF, TXT, or Markdown files and index them into passages with embeddings.</td></tr>
+    <tr><td>F2</td><td>List indexed files with passage count, character count, and upload time, and delete a file together with its vectors.</td></tr>
+    <tr><td>F3</td><td>Ask a question in RAG mode and receive an answer written from retrieved passages, with citations of the form [Source n].</td></tr>
+    <tr><td>F4</td><td>Ask the same question in Baseline mode with no passages attached.</td></tr>
+    <tr><td>F5</td><td>Show the retrieved excerpts beside the conversation.</td></tr>
+    <tr><td>F6</td><td>Keep a conversation across turns, and use recent user turns when forming the retrieval query.</td></tr>
+    <tr><td>F7</td><td>Create, list, rename, pin, and delete conversations.</td></tr>
+    <tr><td>F8</td><td>Restrict retrieval to a chosen document, or to a document whose file name appears in the question.</td></tr>
+    <tr><td>F9</td><td>Trim history and passages so the model request stays within a fixed character budget.</td></tr>
+    <tr><td>F10</td><td>If Gemini cannot be called, return a short extractive fallback built from the retrieved passages.</td></tr>
+    <tr><td>F11</td><td>Compute recall and precision locally, and save the top-K and lexical weight that maximise F1 on that check.</td></tr>
+  </tbody>
+  <caption>Table 1. Functional requirements implemented by DevMind.</caption>
+</table>
+
+<h2>3.3 Non-functional requirements</h2>
+<ul>
+  <li><strong>Local control of data.</strong> Documents, vectors, chats, and retrieval settings stay in JSON files on the server. They are not sent to a database host.</li>
+  <li><strong>One secret.</strong> The only credential is <code>GEMINI_API_KEY</code>. It is read from the environment at startup and is not written into the source tree. The <code>.env</code> file is gitignored.</li>
+  <li><strong>Small model calls.</strong> One generation call is made per question. Context is trimmed before that call. Evaluation makes no model call.</li>
+  <li><strong>Graceful degradation.</strong> A missing key or a failed Gemini call still yields excerpts when passages were retrieved. The interface reports when the API process is offline.</li>
+  <li><strong>A readable codebase.</strong> Each stage lives in its own module under <code>backend/src/rag/</code>, so a reader can move from the pipeline diagram to the file that implements the stage.</li>
+  <li><strong>Browser access.</strong> The client is a responsive web page. Chat, Library, and Compare are usable on a narrow screen, with the sidebar opening as a drawer.</li>
+</ul>
+
+<h2>3.4 Constraints</h2>
+<p>
+The generator and the preferred embedder are hosted services, so a normal written answer needs a network path to Gemini and a valid key. The fallback embedder downloads its weights the first time it runs. PDF text comes from the text layer of the file; a scan without that layer will fail the minimum-length check or index almost nothing. Vectors are stored as JSON numbers, which is simple and, for a very large library, heavier than a dedicated vector index. The CORS policy allows the development origins <code>http://localhost:5174</code> and <code>http://127.0.0.1:5174</code>. The server listens on all interfaces at the configured port, which defaults to 4000.
+</p>
+
+<h1>4. System design</h1>
+
+<h2>4.1 Architecture</h2>
+<p>
+DevMind is a two-process web application. The client is a React single-page application. In development, Vite serves it and proxies every request that starts with <code>/api</code> to the Express server. The server owns ingestion, retrieval, generation, evaluation, and the JSON store. The browser never holds the API key and never computes embeddings. When a production build of the client exists at <code>frontend/dist</code>, the same Express process serves that build and falls back to <code>index.html</code> for client-side routes, while leaving <code>/api</code> paths on the API.
+</p>
+<p>
+A question travels through a narrow function, <code>askQuestion</code>, in <code>pipeline.js</code>. Chat mode loads the conversation, sends the question with the chosen mode and optional document id, and appends the user turn and the assistant turn to the conversation file. The one-off route <code>POST /api/ask</code> calls the same function and does not save a chat. This keeps the answering policy in one place.
+</p>
+
+<h2>4.2 Pipeline</h2>
+<p>
+Figure 1 is the pipeline used by the project. A question starts from the user and draws on seven stages. Data sources are the uploaded PDF, TXT, and Markdown files. Parsing and chunking use pdf-parse and the text splitter. Embeddings are produced by Gemini or by MiniLM. The vector store writes JSON and searches with cosine similarity. Retrieval reranks, can filter to one document, and applies top-K. Generation calls Gemini, asks for citations, and can run a baseline with no passages. Evals compute recall and precision and can tune the local settings. The evaluation stage does not call Gemini.
+</p>
+<figure>
+  <img src="../DevMind-RAG-Pipeline.png" alt="DevMind RAG pipeline diagram" />
+  <figcaption>Figure 1. DevMind retrieval-augmented generation pipeline.</figcaption>
+</figure>
+<p>
+The stages are not seven separate network services. They are functions in one Node process. The diagram is a map of data flow. Ingestion covers stages 1 to 4. A RAG question covers embedding the query, search, rerank, trimming, and generation. A baseline question skips search and sends only the question and recent chat. The Compare actions cover stage 7 only.
+</p>
+
+<h2>4.3 Technology stack</h2>
+<table>
+  <thead>
+    <tr><th>Layer</th><th>Choice</th><th>Role in DevMind</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Frontend</td><td>React 19, Vite 6, Tailwind CSS 4</td><td>Chat, Library, Compare, sidebar, citations</td></tr>
+    <tr><td>Markdown</td><td>react-markdown</td><td>Renders assistant answers that contain Markdown</td></tr>
+    <tr><td>Backend</td><td>Node.js, Express 4</td><td>HTTP API and static hosting of the production build</td></tr>
+    <tr><td>Uploads</td><td>Multer, memory storage</td><td>Receives the file in memory, limit 12 MB</td></tr>
+    <tr><td>PDF text</td><td>pdf-parse</td><td>Extracts the text layer of a PDF</td></tr>
+    <tr><td>Splitting</td><td>@langchain/textsplitters</td><td>Recursive character chunks of 900 with overlap 150</td></tr>
+    <tr><td>LLM and embeddings</td><td>@google/genai</td><td>Gemini chat models and gemini-embedding-001</td></tr>
+    <tr><td>Local embeddings</td><td>@xenova/transformers</td><td>MiniLM fallback when Gemini embeddings fail</td></tr>
+    <tr><td>Identifiers</td><td>uuid</td><td>Document ids and conversation ids</td></tr>
+    <tr><td>Storage</td><td>JSON files</td><td>Documents, vectors, chats, retrieval settings</td></tr>
+  </tbody>
+  <caption>Table 2. Technology stack.</caption>
+</table>
+
+<h2>4.4 Data stored on disk</h2>
+<p>
+All generated state lives under <code>backend/data/</code>, which is created on demand. Four files matter.
+</p>
+<table>
+  <thead>
+    <tr><th>File</th><th>Contents</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>documents.json</td><td>One object per file: id, original name, upload time, chunk count, character count. Pretty-printed.</td></tr>
+    <tr><td>vectors.json</td><td>One object per passage: document id and name, upload time, chunk index, text, character count, and the embedding array. Written compactly because the arrays are large.</td></tr>
+    <tr><td>conversations.json</td><td>Chats with title, pin state, timestamps, and messages. Assistant messages store sources, mode, and latency.</td></tr>
+    <tr><td>retrieval.json</td><td>candidateCount, topK, and lexicalWeight. Missing file means the built-in defaults.</td></tr>
+  </tbody>
+  <caption>Table 3. Local data files.</caption>
+</table>
+<p>
+Deleting a document filters both arrays and writes them back. There is no separate vector index to rebuild. The cost is that every search reads the vector file. For a project library of course notes and a few papers, that cost is acceptable and the format stays inspectable in an editor.
+</p>
+
+<h2>4.5 Module map</h2>
+<table>
+  <thead>
+    <tr><th>Module</th><th>Responsibility</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>backend/src/index.js</td><td>Express routes, CORS, upload middleware, static client</td></tr>
+    <tr><td>backend/src/loadEnv.js</td><td>Reads backend/.env into process.env without overriding existing variables</td></tr>
+    <tr><td>backend/src/rag/pipeline.js</td><td>Ingest, ask, context string, document filter, fallback answers</td></tr>
+    <tr><td>backend/src/rag/embeddings.js</td><td>Gemini embeddings with MiniLM fallback and mean pooling</td></tr>
+    <tr><td>backend/src/rag/gemini.js</td><td>Client, model list, retries, embed and generate calls</td></tr>
+    <tr><td>backend/src/rag/store.js</td><td>Load, save, cosine search, delete, counts</td></tr>
+    <tr><td>backend/src/rag/rerank.js</td><td>Content words, lexical score, phrase score, rerank</td></tr>
+    <tr><td>backend/src/rag/context.js</td><td>Token estimate and trimming of history and sources</td></tr>
+    <tr><td>backend/src/rag/eval.js</td><td>Gold questions, recall, precision, F1 grid search</td></tr>
+    <tr><td>backend/src/rag/retrievalSettings.js</td><td>Read and write retrieval.json</td></tr>
+    <tr><td>backend/src/rag/conversations.js</td><td>Chat list, create, append, rename, pin, delete</td></tr>
+    <tr><td>frontend/src/App.jsx</td><td>Screens, chat state, upload, evaluation buttons</td></tr>
+    <tr><td>frontend/src/api.js</td><td>Fetch wrappers for every API route</td></tr>
+  </tbody>
+  <caption>Table 4. Source modules and their jobs.</caption>
+</table>
+
+<h1>5. Implementation</h1>
+
+<h2>5.1 Server and configuration</h2>
+<p>
+The process starts by importing <code>loadEnv.js</code>, which parses <code>backend/.env</code> if the file exists. Blank lines and lines starting with <code>#</code> are ignored. A value may be wrapped in single or double quotes. A variable already present in the environment is left unchanged, so a shell export wins over the file. The server then builds an Express application, enables JSON bodies, and allows the Vite origins. Multer stores the upload in memory with a 12 MB limit. The listen address is <code>0.0.0.0</code> and the port is <code>PORT</code> or 4000. On startup the log prints whether the Gemini key is missing, an AI Studio key, a standard key, or some other format. The key itself is not printed.
+</p>
+
+<h2>5.2 Ingestion and chunking</h2>
+<p>
+<code>ingestFile</code> receives the original file name, the buffer, and the MIME type. A PDF, recognised by MIME type or by a <code>.pdf</code> suffix, is passed to pdf-parse. Any other file is decoded as UTF-8, which covers TXT and Markdown. Whitespace is collapsed and the ends are trimmed. Text shorter than 30 characters raises “Could not extract enough text from this file.” The remaining string is split. Each chunk is embedded in order and stored with its index. The document id is a UUID. The returned metadata contains the id, name, upload time in ISO form, chunk count, and character count. The client lists those fields in Library.
+</p>
+<p>
+Embedding happens during upload, not during the first question. A large file therefore takes longer to index, and a later question only embeds the query. Chunks are embedded one after another. That keeps the implementation straightforward and respects a provider that expects a single text per call. The passage text stored beside the vector is the chunk itself, so the citations panel can show the words that were searched, not a second summary.
+</p>
+
+<h2>5.3 Embeddings</h2>
+<p>
+<code>embedText</code> prefers Gemini whenever a key is set. <code>geminiEmbed</code> calls <code>embedContent</code> on <code>gemini-embedding-001</code> and reads <code>response.embeddings[0].values</code>. An empty vector is treated as failure. On failure, or when no key is set, <code>embedLocal</code> runs. The local pipeline is created once and reused. It requests mean pooling and normalisation. The helper <code>meanPool</code> averages token rows if the raw tensor is still token-wise, which keeps the result a single vector. The console records the fallback so an operator can see that the model changed.
+</p>
+<p>
+Because the two embedders differ, mixed vectors would make cosine meaningless. <code>searchSimilar</code> drops any stored vector whose length differs from the query vector. After a lasting change of embedder, the practical step is to delete the affected documents and upload them again so every passage shares one space. The report states this as an operational rule rather than a silent conversion, because the code does not re-embed old files automatically.
+</p>
+
+<h2>5.4 Vector store and search</h2>
+<p>
+<code>loadStore</code> reads the two JSON files and returns empty arrays if they are missing. <code>addDocument</code> places the new document at the front of the list and appends one vector record per chunk, copying the document id, name, and upload time onto each record. <code>persist</code> writes documents with indentation and vectors without, then both files replace the previous contents. A crash during the write could leave a partial file; the project accepts that risk in exchange for a dependency-free store.
+</p>
+<p>
+<code>searchSimilar</code> loads the store, applies the document filter, and returns an empty list if the pool or the query vector is empty. Each surviving vector receives a cosine score. The list is sorted descending and cut to the candidate count. <code>stats</code> returns the document count and the chunk count used by the health endpoint and the sidebar.
+</p>
+<p>
+The cosine function is a single loop over the shared index range. It accumulates the dot product and the two squared norms, then divides. This is the standard definition from the vector-space model used in information retrieval since the work of Salton and others. No approximate nearest-neighbour structure is used. Exact scan is the right tool while the collection is the user’s own uploads.
+</p>
+
+<h2>5.5 Retrieval, filter, and rerank</h2>
+<p>
+In RAG mode, <code>askQuestion</code> loads documents and the saved retrieval settings. The document filter checks an explicit <code>docId</code> from the request first. The Chat screen sends the id chosen in the “Search in” menu, or an empty string for all documents. If no id was sent, the filter looks for a file-name stem longer than three characters that appears, in lower case, inside the question. A question that names <code>lecture-3.pdf</code> by its stem can therefore narrow itself. Otherwise every document remains eligible.
+</p>
+<p>
+Follow-up questions are often short: “what about the second method?” On their own they embed poorly. DevMind builds the retrieval query from the last two user messages plus the current question, joined and cut at 1200 characters. That query is embedded and searched. The candidate list is reranked with the same query text, the configured top-K, and the configured lexical weight. <code>trimSources</code> may drop passages that would overflow the context budget. Baseline mode leaves the source list empty and does not embed the question for search.
+</p>
+<p>
+Reranking recomputes the score as a weighted sum of the stored cosine and the lexical fraction, sorts again, and slices to top-K. The lexical value is also stored on the object, rounded to four decimal places, for inspection. The default candidate count stays 12 even after tuning. The tuner writes top-K and lexical weight only.
+</p>
+
+<h2>5.6 Generation, citations, and fallback</h2>
+<p>
+The context block is a join of the kept passages. Each block is labelled with a source number, the file name, the chunk index starting at one, and the score to three decimal places, followed by the passage text. Blocks are separated by a horizontal rule. This is the text the model is told to treat as CONTEXT.
+</p>
+<p>
+RAG mode uses a system instruction that names DevMind as a document-grounded assistant, tells it to use the retrieved context and the earlier chat, tells it to say when the documents do not contain the answer, and tells it to cite sources inline as [Source 1] and [Source 2]. Baseline mode asks for a clear, concise answer and mentions follow-up turns, and it attaches no context. Both calls pass the trimmed history.
+</p>
+<p>
+<code>geminiGenerate</code> maps history roles to the API’s user and model roles, keeps at most eight turns, and appends the current user text. Temperature is 0.2, which favours stable wording over wide variation. The HTTP timeout on the call is 20 seconds. Models are tried in order: <code>gemini-3.5-flash</code>, <code>gemini-3.1-flash-lite</code>, <code>gemini-flash-lite-latest</code>, and <code>gemini-3.8-flash</code>. A failure whose message indicates overload (HTTP 503, unavailable, or high demand) is retried once after 1.5 seconds. Any other failure moves to the next model. If every model fails, the error propagates to the pipeline, which catches it and builds a fallback answer.
+</p>
+<p>
+The fallback depends on mode. Baseline fallback states that Gemini could not be reached and that the caller should retry. RAG fallback with an empty library tells the user to upload files. When passages exist, a question that looks like a request for a summary or a list becomes up to three numbered sentences, each cut at the first sentence boundary or at about 180 characters, each marked with a source number. Other questions become up to two highlighted excerpts. The reply says that the wording is retrieval-based and that a later try can produce a fluent answer. Returned sources always include the file name, chunk index, score to four decimal places, and an excerpt of at most 280 characters. Latency is the wall time from the start of <code>askQuestion</code> to the return, in milliseconds. The response also includes the mode and, when a document filter matched, the file name.
+</p>
+
+<h2>5.7 Conversations</h2>
+<p>
+A new conversation has a UUID, the title “New chat”, pin flags cleared, and an empty message list. The first user question replaces that title with the first 48 characters of the question, unless the user has already renamed it. Each turn appends a user message and an assistant message. The assistant message keeps the answer text, the sources, the mode, the latency, and a timestamp. Listing chats returns a summary: id, title, update time, pin state, message count, and a preview taken from the first user message, cut at 80 characters. Pinned chats sort first, by pin time, and the rest sort by update time.
+</p>
+<p>
+Rename writes a trimmed title of at most 80 characters. Pin sets or clears <code>pinned</code> and records <code>pinnedAt</code>. Delete removes the conversation object. These operations are the sidebar actions. The client loads a full conversation when a row is opened and replaces the message pane with that transcript, including the stored sources so the citations panel can reopen.
+</p>
+
+<h2>5.8 Context limits</h2>
+<p>
+<code>estimateTokens</code> treats four characters as one token. That is a rough English estimate used only for budgeting, not for billing. History is walked from the newest turn backward until the next turn would pass 700 estimated tokens. The kept list is then limited to eight messages. Sources are walked from the highest-ranked passage forward until the next passage would pass 1800 estimated tokens. At least one history item and one source are kept when any exist, so a single long passage is not discarded solely because it exceeds the budget. Dropped counts are computed and returned by the helpers. The pipeline uses the trimmed lists.
+</p>
+<p>
+The budgets exist so a long chat and a generous top-K cannot silently grow the Gemini request without bound. They also make latency more predictable. A reader who changes top-K on the Compare page should remember that trimming may still withhold the last passages if they do not fit.
+</p>
+
+<h2>5.9 Frontend</h2>
+<p>
+The client is one React tree in <code>App.jsx</code>, with small components for the sidebar, a chat bubble, the citations panel, and the DevMind mark and avatar. On load it requests health, the document list, and the conversation list. Failure sets an offline message that tells the operator to start the backend. The welcome message explains Library and follow-up chats. Sending a question creates a conversation if none is active, then posts the message. The transcript is replaced with the saved conversation so the client and the file stay aligned.
+</p>
+<p>
+The composer is a textarea. Enter sends, and Shift+Enter inserts a line. The placeholder changes with the mode. RAG and Baseline are a segmented control. The document menu lists every indexed file plus “All documents”. Library is a drop zone and a file picker that accepts <code>.pdf</code>, <code>.txt</code>, and <code>.md</code>, including several files in one drop. Each file is uploaded in sequence. A card shows the name, passage count, character count, and date, with a remove button. Compare shows a four-row contrast of context, citations, best use, and hallucination risk, then two buttons: Check retrieval and Tune locally. Results print recall and precision as percentages, the question count, and a note of zero tokens. After tuning, the chosen top-K is shown as well.
+</p>
+<p>
+Citations render only on the chat screen, and only when the latest assistant turn that has sources is non-empty. Answers go through a Markdown renderer, so lists and emphasis returned by the model display as formatted text. The layout is a dark interface, full viewport height, with a collapsible navigation region on small screens.
+</p>
+
+<h1>6. Application programming interface</h1>
+<p>
+All routes live under <code>/api</code>. Successful uploads and new chats use HTTP 201. A missing chat or a missing question uses 404 or 400. Failures include an <code>error</code> string. The chat message body is JSON with <code>question</code>, <code>mode</code> (<code>rag</code> or <code>baseline</code>), and an optional <code>docId</code>.
+</p>
+<table>
+  <thead>
+    <tr><th>Method</th><th>Path</th><th>Purpose</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>GET</td><td>/api/health</td><td>Status plus document and passage counts</td></tr>
+    <tr><td>GET</td><td>/api/documents</td><td>List indexed files</td></tr>
+    <tr><td>POST</td><td>/api/documents</td><td>Upload a file, multipart field name <code>file</code></td></tr>
+    <tr><td>DELETE</td><td>/api/documents/:id</td><td>Remove a file and its vectors</td></tr>
+    <tr><td>GET</td><td>/api/conversations</td><td>List chats</td></tr>
+    <tr><td>POST</td><td>/api/conversations</td><td>Start a chat</td></tr>
+    <tr><td>GET</td><td>/api/conversations/:id</td><td>Load one chat</td></tr>
+    <tr><td>PATCH</td><td>/api/conversations/:id</td><td>Rename or pin</td></tr>
+    <tr><td>DELETE</td><td>/api/conversations/:id</td><td>Delete a chat</td></tr>
+    <tr><td>POST</td><td>/api/conversations/:id/messages</td><td>Ask inside a chat</td></tr>
+    <tr><td>POST</td><td>/api/eval</td><td>Local recall and precision</td></tr>
+    <tr><td>POST</td><td>/api/optimize</td><td>Choose top-K and lexical weight from local scores</td></tr>
+    <tr><td>POST</td><td>/api/ask</td><td>One-off question, no saved chat</td></tr>
+  </tbody>
+  <caption>Table 5. HTTP interface.</caption>
+</table>
+<p>
+<code>POST /api/ask</code> refuses to run when <code>GEMINI_API_KEY</code> is unset. The chat route does not have that early refusal: <code>askQuestion</code> can still return the extractive fallback. <code>POST /api/eval</code> returns HTTP 400 when no passage yields a question, with the message “Upload a document before checking retrieval.” The optimize route returns the same kind of message when the library is empty. Health always answers, including when the library is empty, so the client can tell a quiet library from a stopped server.
+</p>
+<p>
+An answer payload contains <code>answer</code>, <code>mode</code>, <code>latencyMs</code>, <code>filter</code> (a file name or null), and <code>sources</code>. Each source has <code>docName</code>, <code>chunkIndex</code>, <code>score</code>, and <code>excerpt</code>. The chat route also returns the updated <code>conversation</code>. The eval payload contains <code>questions</code>, <code>recall</code>, <code>precision</code>, per-question <code>rows</code>, <code>topK</code>, <code>lexicalWeight</code>, and <code>tokenCost</code> set to 0. The optimize payload contains the saved <code>settings</code>, the recall and precision of the winning cell, and <code>tokenCost</code> 0.
+</p>
+
+<h1>7. Evaluation</h1>
+
+<h2>7.1 What is measured</h2>
+<p>
+The Compare page measures retrieval, not the prose of Gemini. Building a fair test of answer quality would need human judgements or a second model, and it would spend tokens. DevMind instead asks a narrower question: if a passage is turned into a short query made from its own words, does a local ranker place that passage in the top results, and how many of those results share its wording? The check reads <code>vectors.json</code>, scores every passage on the machine, and returns. <code>tokenCost</code> is fixed at 0 so the interface can state that the action did not call Gemini.
+</p>
+<p>
+This is a diagnostic. It uses lexical overlap and a phrase bonus. The live RAG path uses cosine similarity and then a different mix of cosine and overlap. A high score on the check supports the lexical side of ranking and the choice of top-K. It does not, by itself, prove that the embedding search would have retrieved the same passage, and it does not prove that the written answer was correct. Those are separate questions, and the project keeps them separate on purpose.
+</p>
+
+<h2>7.2 How questions are built</h2>
+<p>
+Every stored chunk is a candidate source. Its content words are computed with the same tokenizer as reranking. Chunks with fewer than six content words are skipped, because they cannot form the fixed query. For the others, the start index is one third of the way through the word list, capped so that six words remain. Those six words, joined by spaces, are the query. The gold item is the pair of document id and chunk index. Using the middle of the passage, rather than the first six words, avoids a query that is only a heading repeated on many chunks.
+</p>
+<p>
+The method is automatic and reproducible, and it is also easy. The query is made of words that occur in the gold passage, so a pure overlap ranker is well placed to find it. The resulting recall is an upper-leaning view of lexical retrieval. It is still useful for comparing settings against each other, because every setting is scored on the same questions. It would be a weak claim about questions a user types from scratch, which may paraphrase the file. Chapter 9 lists a human question set as future work.
+</p>
+
+<h2>7.3 Scoring</h2>
+<p>
+For each question the ranker scores every vector with <code>localRelevance</code>. That function mixes the lexical fraction with a phrase flag. The phrase flag is 1 when the passage contains the first content words of the query, up to four of them, as a contiguous lower-case phrase, and 0 otherwise. With weight λ the local relevance is:
+</p>
+<p class="formula">relevance = (1 − λ) · lexical + λ · phrase</p>
+<p>
+The top-K rows of this ranking are the result list. A hit is recorded when the gold chunk is among them. Recall is the number of hits divided by the number of questions. For precision, a result is relevant when it is the gold chunk or when <code>localRelevance</code> with λ set to 0 is at least 0.5. With λ at 0 the phrase term drops out, so the test is “at least half of the query content words appear in the passage.” Precision for one question is the number of relevant results divided by top-K. The reported precision is the mean of those values. Scores are rounded to three decimal places.
+</p>
+
+<h2>7.4 Local tuning</h2>
+<p>
+<code>optimizeRetrieval</code> builds the same questions and searches a small grid. Lexical weight takes the values 0.2, 0.35, and 0.5. Top-K takes the values 3, 4, and 6. That is nine cells. Each cell produces recall and precision. The cell with the highest F1 is kept. Ties keep the first winner, because a later cell replaces the best only when its F1 is strictly greater. The winner’s top-K and lexical weight are written to <code>retrieval.json</code>. Candidate count remains 12. The next RAG question uses the saved numbers for the cosine candidate pool’s rerank and cut. The response shows the new settings and the recall and precision of the winning cell.
+</p>
+<p>
+Nine exact scans of the vector list are cheap at the size of a personal library and expensive if the JSON file grows to a very large corpus. The grid is intentionally tiny so a click on “Tune locally” finishes without a model and without a long wait on course-sized uploads. A finer grid, or a grid over chunk size, would belong to a later experiment. Chunk size is fixed in code today and is not part of the saved settings.
+</p>
+
+<h2>7.5 How to read the scores</h2>
+<p>
+Suppose the library yields 40 questions, top-K is 4, 30 questions place the gold chunk in the top 4, and the average fraction of relevant rows is 0.45. The page shows recall 75 percent and precision 45 percent, with 40 questions and 0 tokens. Raising top-K tends to raise recall and can lower precision, because the denominator grows and extra passages are more often off-topic. Raising the lexical weight favours shared words and the phrase bonus over the rest of the local score. The right cell is the one with the best balance under F1, which is what the tuner stores.
+</p>
+<p>
+Operators should upload the documents they care about before checking. An empty store cannot be scored. After tuning, a RAG question should be asked again so the new top-K is visible in the citations. Baseline questions ignore the setting, because they do not retrieve.
+</p>
+
+<h1>8. Installation and demonstration</h1>
+
+<h2>8.1 Requirements</h2>
+<p>
+The server needs Node.js 20 or newer. The client needs the same, because Vite runs on Node. A Gemini key is created in Google AI Studio and placed in the environment file. The first local embedding, if it is ever required, needs network access to obtain the MiniLM weights. Afterwards those weights are cached by the transformers runtime. A modern browser is enough for the interface. No database is installed.
+</p>
+
+<h2>8.2 Configuration</h2>
+<p>
+Create <code>backend/.env</code> with the key and the port:
+</p>
+<pre>GEMINI_API_KEY=your_key_here
+PORT=4000</pre>
+<p>
+The file is read only on the server. It should not be committed. The repository gitignore already excludes <code>.env</code>. There is no OpenAI key, no login provider, and no database password. If the key is omitted, uploads can still be indexed with MiniLM, chat can still return excerpts, and <code>POST /api/ask</code> will refuse until a key is present.
+</p>
+
+<h2>8.3 Running the system</h2>
+<p>
+Install and start the API from the backend directory:
+</p>
+<pre>cd backend
+npm install
+npm start</pre>
+<p>
+The development watcher is <code>npm run dev</code>, which restarts Node when source files change. In a second terminal, install and start the client:
+</p>
+<pre>cd frontend
+npm install
+npm run dev</pre>
+<p>
+Open <code>http://localhost:5174</code>. Vite forwards <code>/api</code> to <code>http://localhost:4000</code>. The health line in the server log should show the key form, and the sidebar should show the document and passage counts once a file has been indexed. If the page reports that the backend is offline, the API process is not reachable on port 4000.
+</p>
+
+<h2>8.4 Demonstration script</h2>
+<ol>
+  <li>Open Library. Drop a PDF, or a TXT or Markdown file, and wait until indexing finishes. The card should show a passage count greater than zero.</li>
+  <li>Open Chat. Leave the mode on RAG and leave the document menu on all documents, or pick the file just uploaded. Ask a question whose answer is a sentence in that file.</li>
+  <li>Read the answer and open the citations. Each excerpt should come from the uploaded file. Inline markers such as [Source 1] refer to those excerpts in order.</li>
+  <li>Switch the mode to Baseline and ask the same question. The answer is now written without passages. The comparison is the point of the two modes: one is tied to the library, and the other is the model alone.</li>
+  <li>Ask a short follow-up in the same chat. The retrieval query includes the two most recent user messages, and the generator receives the trimmed history, so the follow-up can refer to the previous turn.</li>
+  <li>Use the sidebar to rename the chat, pin it, start another, and delete one that is no longer needed. Pinned chats stay at the top of the list.</li>
+  <li>Open Compare. Read the four-row contrast, then click Check retrieval. The line reports recall, precision, the number of automatic questions, and zero tokens. Click Tune locally to store the top-K and lexical weight with the best F1 on that check.</li>
+  <li>Return to Library and remove a file. Its vectors leave with it. A later search should no longer cite it.</li>
+</ol>
+<p>
+A useful demonstration file is one with real sentences rather than a scanned image. If indexing reports that not enough text could be extracted, the file has too little text in its text layer. A TXT export of the same material will index.
+</p>
+
+<h2>8.5 Production build</h2>
+<p>
+The client can be built and previewed on its own:
+</p>
+<pre>cd frontend
+npm run build
+npm run preview</pre>
+<p>
+If <code>frontend/dist/index.html</code> exists when the API starts, Express serves that directory. Requests that are not under <code>/api</code> and that do not match a file receive <code>index.html</code>, so a refresh on the client still loads the application. In that arrangement one process serves both the page and the API. The development proxy is unnecessary once the browser talks to the API origin directly, and the CORS list still covers the Vite port for development.
+</p>
+
+<h1>9. Discussion</h1>
+
+<h2>9.1 Design choices</h2>
+<p>
+Several choices keep the project small enough to read and large enough to show a complete RAG loop. JSON files replace a vector database so a reviewer can open <code>vectors.json</code> and see the passage beside its numbers. Exact cosine replaces an approximate index so the ranking rule is the textbook formula. One generator call per question replaces a chain of model calls for rewriting, grading, and answering. The lexical reranker replaces a cross-encoder, which would be more accurate on some sets and would add a second heavy model. The evaluation grid replaces a manual hunt for top-K.
+</p>
+<p>
+The baseline mode is a product decision as much as a research control. People trust a grounded answer more readily when they can see the ungrounded one fail on a detail that is present in the PDF. DevMind makes that switch a button, not a second program. Citations are the other half of the same decision. An answer that names [Source 1] can be checked in the side panel in one glance. The panel shows the excerpt stored at answer time, so later edits to the file do not rewrite history.
+</p>
+<p>
+The fallback path matters for a classroom demo. Hosted models sometimes return overload errors. Showing the retrieved sentences anyway means the retrieval half of the project can still be marked when generation is busy. The message on that path says what happened, so an excerpt is not mistaken for a Gemini paragraph.
+</p>
+<p>
+History is included in both retrieval and generation, with different budgets. Retrieval sees two user turns because short follow-ups are ambiguous. Generation sees a longer trimmed chat because the wording of the answer may depend on what was already said. The split matches the two jobs: find passages, then write.
+</p>
+
+<h2>9.2 Limitations</h2>
+<ul>
+  <li>Scanned PDFs and pages that are only images yield little or no text. There is no optical character recognition step.</li>
+  <li>Whitespace collapsing removes line breaks. Tables and multi-column PDFs may be extracted in an order that is hard to read, because that is what pdf-parse returns.</li>
+  <li>Chunk size and overlap are constants. A dense table and a sparse essay would benefit from different sizes, and the tuner cannot change them.</li>
+  <li>The vector file is rewritten in full on every upload or delete, and every search parses it. A large corpus will become slow.</li>
+  <li>There is no authentication and no separation between users. Anyone who can reach the port can read the library and the chats.</li>
+  <li>Embeddings from Gemini and MiniLM cannot be mixed. The search ignores mismatched lengths and does not migrate old vectors.</li>
+  <li>The retrieval check builds questions from the passages themselves and ranks them without cosine. It is a tuning aid. It is not a benchmark of user questions or of answer correctness.</li>
+  <li>The model can still cite a passage and then overstate it. The instruction says to stick to the context. Compliance is not guaranteed by the code.</li>
+  <li>Only one generation provider is integrated. A key outage leaves the extractive fallback.</li>
+  <li>Upload is limited to 12 MB, and chunk embedding is sequential, so a long book takes a long index time and many embedding calls.</li>
+</ul>
+
+<h2>9.3 Future work</h2>
+<p>
+A next version could add a real question set written by hand against two or three fixed documents, and report recall of the embedding search on that set beside the current lexical check. Answer quality could be sampled by comparing claims in the reply with the cited excerpts. Chunking could become a setting, with a second splitter for Markdown headings so a section stays together. The store could move to an embedded vector index once the JSON file passes a measured size, while keeping an export of the text for inspection.
+</p>
+<p>
+OCR for scanned PDFs would widen the files students can upload. A cross-encoder reranker could replace the lexical mix when the machine has the memory for it. Query rewriting could expand a short follow-up into a standalone question; that would cost a second model call, which this version avoids. Multi-user deployment would need accounts, per-user directories, and a tighter network bind than <code>0.0.0.0</code> on an open host. None of these additions change the core loop already present: parse, chunk, embed, search, rerank, generate, cite, and measure retrieval locally.
+</p>
+
+<h1>10. Conclusion</h1>
+<p>
+DevMind is a document question-answering system built around retrieval-augmented generation. It indexes PDF, TXT, and Markdown files into overlapping passages, embeds them with Gemini or with a local MiniLM model, and stores the vectors in JSON. A question is embedded, the nearest passages are found with cosine similarity, and a lexical reranker keeps a small top-K set. Gemini writes the answer from that set and is instructed to cite it. A baseline mode asks the same model with an empty set. Conversations, document filters, and a citations panel make the loop usable. When the model cannot be reached, the interface still shows excerpts from the passages that search returned.
+</p>
+<p>
+The Compare page scores a local retrieval check with recall and precision and stores the top-K and lexical weight with the best F1. That check spends no Gemini tokens. The HTTP API exposes upload, chat, evaluation, and a one-off question. The client is a React application with Library, Chat, and Compare. Together these parts satisfy the objectives in Chapter 1: grounded answers, visible sources, a comparable baseline, persistent chats, and a retrieval measurement that runs on the same machine as the store.
+</p>
+<p>
+The project is complete as a single-user local application and is open about its limits. It does not read scans, it does not scale like a dedicated vector database, and its automatic scores are a diagnostic of lexical ranking. Within those bounds it is a working, inspectable implementation of the RAG pipeline, documented here from the modules that perform each stage.
+</p>
+
+<h1>References</h1>
+<ol class="small">
+  <li>Devlin, J., Chang, M.-W., Lee, K., and Toutanova, K. (2019). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. <em>Proceedings of NAACL-HLT</em>.</li>
+  <li>Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., Dai, Y., Sun, J., Wang, M., and Wang, H. (2023). Retrieval-Augmented Generation for Large Language Models: A Survey. arXiv:2312.10997.</li>
+  <li>Gemini Team, Google (2023). Gemini: A Family of Highly Capable Multimodal Models. arXiv:2312.11805.</li>
+  <li>Karpukhin, V., Oğuz, B., Min, S., Lewis, P., Wu, L., Edunov, S., Chen, D., and Yih, W. (2020). Dense Passage Retrieval for Open-Domain Question Answering. <em>Proceedings of EMNLP</em>.</li>
+  <li>LangChain (2024). RecursiveCharacterTextSplitter. LangChain text splitters documentation.</li>
+  <li>Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N., Küttler, H., Lewis, M., Yih, W., Rocktäschel, T., Riedel, S., and Kiela, D. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. <em>Advances in Neural Information Processing Systems</em>, 33.</li>
+  <li>Manning, C. D., Raghavan, P., and Schütze, H. (2008). <em>Introduction to Information Retrieval</em>. Cambridge University Press.</li>
+  <li>Reimers, N., and Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. <em>Proceedings of EMNLP-IJCNLP</em>.</li>
+  <li>Salton, G., Wong, A., and Yang, C. S. (1975). A Vector Space Model for Automatic Indexing. <em>Communications of the ACM</em>, 18(11), 613–620.</li>
+  <li>Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., and Polosukhin, I. (2017). Attention Is All You Need. <em>Advances in Neural Information Processing Systems</em>, 30.</li>
+  <li>Wang, W., Wei, F., Dong, L., Bao, H., Yang, N., and Zhou, M. (2020). MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-Trained Transformers. <em>Advances in Neural Information Processing Systems</em>, 33.</li>
+</ol>
+
+<h1>Appendix A. Project structure</h1>
+<pre>DevMind/
+├── backend/
+│   ├── .env                      API key and port (not committed)
+│   ├── data/                     generated JSON store
+│   │   ├── documents.json
+│   │   ├── vectors.json
+│   │   ├── conversations.json
+│   │   └── retrieval.json
+│   └── src/
+│       ├── index.js              HTTP server
+│       ├── loadEnv.js
+│       └── rag/
+│           ├── pipeline.js
+│           ├── gemini.js
+│           ├── embeddings.js
+│           ├── store.js
+│           ├── rerank.js
+│           ├── context.js
+│           ├── eval.js
+│           ├── conversations.js
+│           └── retrievalSettings.js
+└── frontend/
+    └── src/
+        ├── App.jsx               Chat, Library, Compare
+        ├── api.js
+        ├── main.jsx
+        └── components/           sidebar, messages, citations</pre>
+<p>
+The repository also contains <code>DevMind-RAG-Pipeline.png</code>, which is Figure 1 of this report, and this documentation. Frontend package scripts are <code>dev</code> on port 5174, <code>build</code>, and <code>preview</code>. Backend scripts are <code>start</code> and <code>dev</code>.
+</p>
+
+<h1>Appendix B. Default parameters</h1>
+<table>
+  <thead>
+    <tr><th>Parameter</th><th>Value</th><th>Where it is set</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Chunk size</td><td>900 characters</td><td>pipeline.js</td></tr>
+    <tr><td>Chunk overlap</td><td>150 characters</td><td>pipeline.js</td></tr>
+    <tr><td>Minimum extracted text</td><td>30 characters</td><td>pipeline.js</td></tr>
+    <tr><td>Candidate count</td><td>12</td><td>retrievalSettings.js</td></tr>
+    <tr><td>Top-K</td><td>4</td><td>retrievalSettings.js</td></tr>
+    <tr><td>Lexical weight λ</td><td>0.35</td><td>retrievalSettings.js</td></tr>
+    <tr><td>Tuner grid, λ</td><td>0.2, 0.35, 0.5</td><td>eval.js</td></tr>
+    <tr><td>Tuner grid, top-K</td><td>3, 4, 6</td><td>eval.js</td></tr>
+    <tr><td>Retrieval query length</td><td>1,200 characters</td><td>pipeline.js</td></tr>
+    <tr><td>User turns in the query</td><td>last 2</td><td>pipeline.js</td></tr>
+    <tr><td>History budget</td><td>700 estimated tokens</td><td>context.js</td></tr>
+    <tr><td>Source budget</td><td>1,800 estimated tokens</td><td>context.js</td></tr>
+    <tr><td>Token estimate</td><td>4 characters per token</td><td>context.js</td></tr>
+    <tr><td>History messages sent</td><td>at most 8</td><td>context.js and gemini.js</td></tr>
+    <tr><td>Temperature</td><td>0.2</td><td>gemini.js</td></tr>
+    <tr><td>Generation timeout</td><td>20 seconds</td><td>gemini.js</td></tr>
+    <tr><td>Excerpt length</td><td>280 characters</td><td>pipeline.js</td></tr>
+    <tr><td>Upload limit</td><td>12 MB</td><td>index.js</td></tr>
+    <tr><td>API port</td><td>4000</td><td>index.js / .env</td></tr>
+    <tr><td>Client port</td><td>5174</td><td>vite.config.js</td></tr>
+    <tr><td>Embedding model</td><td>gemini-embedding-001</td><td>gemini.js</td></tr>
+    <tr><td>Fallback embedder</td><td>Xenova/all-MiniLM-L6-v2</td><td>embeddings.js</td></tr>
+  </tbody>
+  <caption>Table 6. Default parameters in the current source.</caption>
+</table>
+<p>
+Chat models, tried in order when an earlier model fails, are <code>gemini-3.5-flash</code>, <code>gemini-3.1-flash-lite</code>, <code>gemini-flash-lite-latest</code>, and <code>gemini-3.8-flash</code>. A saved <code>retrieval.json</code> overrides top-K and lexical weight after the user runs Tune locally. Candidate count in that file stays 12.
+</p>
+<p>
+This report was prepared as project documentation for DevMind by Hafiz Muhammad Hashir (roll number B22110006042) and Wasi Uz Zafar Khan (roll number B22110006124), University of Karachi.
+</p>
+
+</body>
+</html>
